@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Maintenance Expense Ledger — Ariankuppam Commune Panchayat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#122C42;
+  --navy-2:#1c3f5c;
+  --teal:#1B8A9C;
+  --teal-soft:#E4F1F2;
+  --amber:#C97A2B;
+  --amber-soft:#F7EADA;
+  --paper:#EFF2EE;
+  --card:#FFFFFF;
+  --ink:#182228;
+  --muted:#647178;
+  --line:#DCE1DA;
+  --danger:#B23A48;
+  --danger-soft:#F8E4E6;
+  --good:#2F7A4F;
+  --good-soft:#E1F0E5;
+  --radius:8px;
+  --shadow:0 1px 2px rgba(18,44,66,.05), 0 2px 8px rgba(18,44,66,.05);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:60px;
+  font-size:15.5px;
+  line-height:1.5;
+}
+h1,h2,h3,.disp{font-family:'Space Grotesk','Segoe UI',sans-serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+button, select, input, textarea{font-family:inherit;font-size:15px;}
+a{color:var(--teal);}
+
+/* ---------- Header ---------- */
+.topbar{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);
+  color:#fff;
+  padding:26px 22px 30px;
+  position:relative;
+  overflow:hidden;
+}
+.topbar::after{
+  content:"";
+  position:absolute; right:-40px; top:-40px;
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle, rgba(27,138,156,.35), transparent 70%);
+}
+.topbar .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:#9FC6D6; margin-bottom:7px;
+}
+.topbar h1{
+  font-size:27px; font-weight:600; margin:0 0 5px; letter-spacing:-.01em;
+}
+.topbar .sub{font-size:14.5px;color:#C9D9E2;}
+.topbar .stamp{
+  position:absolute; right:18px; bottom:14px;
+  font-family:'IBM Plex Mono',monospace; font-size:10px; color:#7FA9BA;
+  border:1px solid #3E5C71; border-radius:20px; padding:4px 10px;
+  letter-spacing:.06em;
+}
+.crest{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(160deg,#1B8A9C,#0F5866);
+  border:2px solid rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;
+  flex-shrink:0;
+}
+.topbar-head{display:flex;align-items:center;gap:14px;}
+.lock-error{font-size:12.5px; color:var(--danger); min-height:16px; margin:-6px 0 10px; text-align:left;}
+.entry-lock-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--amber);background:var(--amber-soft);border-radius:20px;padding:2px 8px;white-space:nowrap;}
+.gov-line{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#7FA9BA;margin-bottom:3px;}
+.icon{display:inline-flex;align-items:center;vertical-align:-2px;}
+.icon svg{display:block;flex-shrink:0;}
+
+.wrap{max-width:1220px;margin:0 auto;padding:22px 18px 0;}
+
+/* ---------- Dashboard cards ---------- */
+.dash-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:12px; margin-bottom:18px;
+}
+.stat-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:16px 18px; position:relative; overflow:hidden;
+  border-left:4px solid var(--teal);
+}
+.stat-card.amber{border-left-color:var(--amber);}
+.stat-card.navy{border-left-color:var(--navy);}
+.stat-card.danger{border-left-color:var(--danger);}
+.stat-card .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;}
+.stat-card .val{font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:var(--navy);}
+.stat-card .val small{font-size:13px;font-weight:400;color:var(--muted);}
+
+.panel{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  margin-bottom:16px; overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px; border-bottom:1px solid var(--line); cursor:pointer;
+  user-select:none;
+}
+.panel-head h3{margin:0;font-size:15.5px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:9px;}
+.panel-head .chev{transition:transform .15s;color:var(--muted);font-size:13px;}
+.panel-head.collapsed .chev{transform:rotate(-90deg);}
+.panel-body{padding:16px 18px;}
+.panel-body.hidden{display:none;}
+
+/* ---------- Charts ---------- */
+.chart-row{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;}
+@media(max-width:720px){.chart-row{grid-template-columns:1fr;}}
+.chart-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;}
+.chart-card h4{margin:0 0 12px;font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;}
+.legend{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:10px;font-size:13px;color:var(--muted);}
+.legend span{display:inline-flex;align-items:center;gap:5px;}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
+/* ---------- Head-wise breakdown ---------- */
+.head-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.head-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:16px 18px; border-top:4px solid var(--teal);
+}
+.head-card .hname{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.head-card .hname .n{font-size:12px;color:var(--muted);font-weight:500;background:var(--paper);border-radius:20px;padding:2px 9px;}
+.head-card .htotal{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--navy);margin:7px 0 9px;}
+.head-bar{height:9px;border-radius:5px;background:var(--danger-soft);overflow:hidden;display:flex;margin-bottom:9px;}
+.head-bar .fill{height:100%;background:var(--good);}
+.head-stats{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);}
+.head-stats b{color:var(--ink);font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.head-card .hmeta{margin-top:10px;font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
+
+/* ---------- Manage lists ---------- */
+.manage-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+@media(max-width:640px){.manage-cols{grid-template-columns:1fr;}}
+.tag-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;}
+.tag{
+  background:var(--teal-soft); color:var(--navy); border:1px solid #C7E1E4;
+  border-radius:20px; padding:5px 8px 5px 12px; font-size:12.5px;
+  display:flex;align-items:center;gap:6px;
+}
+.tag.amber{background:var(--amber-soft);border-color:#E9CDA4;}
+.tag.navy{background:#E7ECF0;border-color:#C7D3DB;color:var(--navy);}
+.tag button{
+  background:rgba(0,0,0,.06);border:none;border-radius:50%;width:16px;height:16px;
+  line-height:1;cursor:pointer;color:var(--danger);font-size:11px;
+}
+.add-row{display:flex;gap:8px;margin-top:10px;}
+.add-row input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:6px;}
+
+/* ---------- Form controls ---------- */
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.02em;}
+.field{margin-bottom:14px;}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:7px;
+  background:#fcfdfc;color:var(--ink);font-size:15px;
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal);}
+textarea{resize:vertical;min-height:56px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
+.inline-add{display:flex;gap:6px;}
+.inline-add select{flex:1;}
+.btn{
+  border:none;border-radius:7px;padding:10px 16px;font-size:14.5px;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-2);}
+.btn-teal{background:var(--teal);color:#fff;}
+.btn-amber{background:var(--amber);color:#fff;}
+.btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--teal);}
+.btn-danger{background:var(--danger-soft);color:var(--danger);}
+.btn-sm{padding:6px 11px;font-size:13px;border-radius:6px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+
+.geo-box{
+  border:1px dashed var(--line);border-radius:7px;padding:10px;font-size:12.5px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fbfcfa;
+}
+.geo-box .coords{font-family:'IBM Plex Mono',monospace;color:var(--navy);}
+.geo-box .status{color:var(--muted);}
+
+.payment-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px;}
+.pay-summary{
+  display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;padding:10px 12px;
+  background:var(--teal-soft);border-radius:7px;font-size:12.5px;
+}
+.pay-summary b{font-family:'IBM Plex Mono',monospace;color:var(--navy);}
+
+/* ---------- Filters ---------- */
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-items:end;}
+.filter-grid label{margin-bottom:3px;}
+
+/* ---------- Table ---------- */
+.table-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.sel-count{font-size:13.5px;color:var(--muted);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:1280px;}
+thead th{
+  background:#F5F7F4;color:var(--navy);text-align:left;padding:11px 12px;
+  font-size:12px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line);
+  position:sticky;top:0;
+}
+tbody td{padding:11px 12px;border-bottom:1px solid #EDF0EB;vertical-align:top;}
+tbody tr:hover{background:#FAFBF8;}
+.amt{font-family:'IBM Plex Mono',monospace;text-align:right;}
+.pill{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;}
+.pill.paid{background:var(--good-soft);color:var(--good);}
+.pill.partial{background:var(--amber-soft);color:#8A5314;}
+.pill.unpaid{background:var(--danger-soft);color:var(--danger);}
+.desc-cell{max-width:220px;}
+.truncate{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.geo-chip{font-size:11px;color:var(--teal);cursor:pointer;}
+.row-actions{display:flex;gap:5px;}
+.icon-btn{background:none;border:1px solid var(--line);border-radius:5px;width:26px;height:26px;cursor:pointer;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;}
+.icon-btn:hover{color:var(--navy);border-color:var(--teal);}
+.empty-state{padding:40px 20px;text-align:center;color:var(--muted);}
+.empty-state .big{font-size:34px;margin-bottom:8px;}
+
+/* ---------- Modal ---------- */
+.modal-backdrop{
+  display:none;position:fixed;inset:0;background:rgba(18,44,66,.45);
+  align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto;z-index:100;
+}
+.modal-backdrop.open{display:flex;}
+.modal{
+  background:#fff;border-radius:12px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:pop .15s ease;
+}
+@keyframes pop{from{transform:translateY(6px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);}
+.modal-head h3{margin:0;font-size:18px;color:var(--navy);}
+.modal-body{padding:16px 18px;max-height:70vh;overflow-y:auto;}
+.modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;}
+.close-x{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);}
+
+/* select-for-export modal list */
+.pick-row{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid #F0F2EE;font-size:12.8px;}
+.pick-row .meta{color:var(--muted);}
+
+.fab-add{
+  position:fixed;right:18px;bottom:18px;z-index:50;
+  background:var(--teal);color:#fff;border:none;border-radius:30px;
+  padding:13px 20px;box-shadow:0 8px 22px rgba(27,138,156,.4);font-weight:600;font-size:14px;
+  display:flex;align-items:center;gap:7px;cursor:pointer;
+}
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);
+  background:var(--navy);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:200;opacity:0;pointer-events:none;transition:opacity .2s, bottom .2s;
+}
+.toast.show{opacity:1;bottom:32px;}
+
+.voucher-edge{
+  height:10px;
+  background-image:radial-gradient(circle at 8px 5px, var(--paper) 5px, transparent 5.5px);
+  background-size:16px 10px;background-repeat:repeat-x;
+}
+
+/* ---------- Tabs ---------- */
+.tabbar{
+  display:flex; gap:4px; background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:5px; margin-bottom:16px; overflow-x:auto;
+}
+.tabbtn{
+  flex:1; min-width:110px; border:none; background:transparent; color:var(--muted);
+  font-weight:600; font-size:14.5px; padding:11px 12px; border-radius:7px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.tabbtn .ic{font-size:14px;}
+.tabbtn .count{
+  background:var(--paper); color:var(--muted); font-size:10.5px; font-weight:700;
+  border-radius:20px; padding:1px 7px;
+}
+.tabbtn.active{background:var(--navy); color:#fff;}
+.tabbtn.active .count{background:rgba(255,255,255,.18); color:#fff;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+@media(max-width:640px){
+  .tabbar{position:sticky; top:0; z-index:40; margin:0 -16px 16px; border-radius:0; padding:5px 8px;}
+  .tabbtn{min-width:0; font-size:11.5px; padding:9px 6px; flex-direction:column; gap:3px;}
+}
+footer.note{max-width:1180px;margin:20px auto 0;padding:0 16px 30px;font-size:11.5px;color:var(--muted);text-align:center;}
+.required::after{content:" *";color:var(--danger);}
+::-webkit-scrollbar{height:8px;width:8px;}
+::-webkit-scrollbar-thumb{background:#C7CFC5;border-radius:4px;}
+
+/* ---------- Map picker ---------- */
+#mapPickContainer{width:100%;height:340px;border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+.map-hint{font-size:12px;color:var(--muted);margin-top:8px;}
+.map-coords-readout{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--navy);margin-top:8px;background:var(--teal-soft);border-radius:6px;padding:8px 10px;}
+.map-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.map-toggle-group{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.map-toggle-btn{border:none;background:#fff;color:var(--navy);font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;}
+.map-toggle-btn.active{background:var(--navy);color:#fff;}
+#mapPickModal.map-fullscreen{
+  position:fixed; inset:0; max-width:none; width:100vw; height:100vh; border-radius:0; margin:0;
+  display:flex; flex-direction:column;
+}
+#mapPickModal.map-fullscreen .modal-body{flex:1; display:flex; flex-direction:column; max-height:none;}
+#mapPickModal.map-fullscreen #mapPickContainer{flex:1; height:auto;}
+.modal-backdrop.fullscreen-backdrop{padding:0; align-items:stretch;}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap" style="padding:0;">
+    <div class="topbar-head">
+      <div class="crest">ACP</div>
+      <div>
+        <div class="gov-line">Government of Puducherry · Local Administration Department</div>
+        <div class="eyebrow">Ariankuppam Commune Panchayat · Works &amp; Maintenance Wing</div>
+        <h1>Maintenance Expense Ledger</h1>
+        <div class="sub">Water supply &amp; minor civil maintenance — expenditure tracking, geo-tagged records, JE-wise accountability</div>
+      </div>
+    </div>
+  </div>
+  <div class="stamp">OFFLINE-READY · LOCAL STORAGE</div>
+</div>
+
+<div class="wrap">
+
+  <!-- TAB NAV -->
+  <div class="tabbar" id="tabbar">
+    <button class="tabbtn" data-tab="tabDashboard" onclick="switchTab('tabDashboard')"><span class="ic icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="20" x2="4" y2="12"/><line x1="10" y1="20" x2="10" y2="6"/><line x1="16" y1="20" x2="16" y2="14"/><line x1="20" y1="20" x2="20" y2="9"/></svg></span> Dashboard</button>
+    <button class="tabbtn" data-tab="tabRecords" onclick="switchTab('tabRecords')"><span class="ic icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="16" x2="13" y2="16"/></svg></span> Records &amp; Filters <span class="count" id="tabRecordsCount">0</span></button>
+    <button class="tabbtn" data-tab="tabManage" onclick="switchTab('tabManage')"><span class="ic icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span> Manage Heads/Contractors</button>
+  </div>
+
+  <!-- TAB 1: DASHBOARD -->
+  <div class="tab-panel" id="tabDashboard">
+    <div class="dash-grid" id="statCards"></div>
+
+    <div class="chart-row" style="margin-bottom:14px;">
+      <div class="chart-card">
+        <h4>Monthly Expenditure Trend</h4>
+        <div id="trendChart"></div>
+      </div>
+      <div class="chart-card">
+        <h4>Head-wise Share</h4>
+        <div id="headChart"></div>
+        <div class="legend" id="headLegend"></div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:14px;">
+      <h4>Head-wise Expenditure vs Paid</h4>
+      <div id="headCompareChart"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head" data-target="headBreakdownBody"><h3><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2 12V4a2 2 0 0 1 2-2h8l10 10-10 10z"/><circle cx="7.5" cy="7.5" r="1.4" fill="currentColor" stroke="none"/></svg></span> Head-wise Breakdown</h3><span class="chev">▾</span></div>
+      <div class="panel-body" id="headBreakdownBody">
+        <div class="head-grid" id="headBreakdownGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: RECORDS + FILTERS -->
+  <div class="tab-panel" id="tabRecords">
+
+  <!-- FILTERS -->
+  <div class="panel">
+    <div class="panel-head" data-target="filterBody"><h3><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Filters</h3><span class="chev">▾</span></div>
+    <div class="panel-body" id="filterBody">
+      <div class="filter-grid">
+        <div><label>Head</label><select id="fHead"><option value="">All heads</option></select></div>
+        <div><label>Contractor</label><select id="fContractor"><option value="">All contractors</option></select></div>
+        <div><label>JE Incharge</label><select id="fJE"><option value="">All JEs</option></select></div>
+        <div><label>Constituency</label><select id="fConstituency"><option value="">All constituencies</option></select></div>
+        <div><label>Village Panchayat</label><select id="fVillage"><option value="">All villages</option></select></div>
+        <div><label>From date</label><input type="date" id="fFrom"></div>
+        <div><label>To date</label><input type="date" id="fTo"></div>
+        <div><label>Payment status</label>
+          <select id="fPay">
+            <option value="">All</option>
+            <option value="paid">Fully paid</option>
+            <option value="partial">Partially paid</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+        </div>
+        <div><label>Geo-tagged</label>
+          <select id="fGeo"><option value="">All</option><option value="yes">Only geo-tagged</option><option value="no">Not geo-tagged</option></select>
+        </div>
+        <div><label>Search</label><input type="text" id="fSearch" placeholder="Description keyword…"></div>
+      </div>
+      <div class="btn-row"><button class="btn btn-ghost btn-sm" onclick="resetFilters()">✕ Reset filters</button></div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="panel">
+    <div class="table-toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-ghost btn-sm" onclick="selectAllVisible()">☑ Select all filtered</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearSelection()">☐ Clear selection</button>
+        <span class="sel-count" id="selCount">0 selected · 0 shown</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" onclick="openExportPickModal()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/></svg></span> Export PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportExcel()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></span> Export Excel</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportKML()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></span> Export KML</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30px;"><input type="checkbox" id="selectAllBox" onclick="toggleSelectAllBox(this)"></th>
+            <th>Work ID</th>
+            <th>Date</th>
+            <th>Head</th>
+            <th>Description</th>
+            <th>Contractor</th>
+            <th>JE Incharge</th>
+            <th>Constituency</th>
+            <th>Village Panchayat</th>
+            <th style="text-align:right;">Amount (₹)</th>
+            <th style="text-align:right;">Paid (₹)</th>
+            <th>Status</th>
+            <th>Geo</th>
+            <th style="width:70px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="big icon" style="justify-content:center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></div>
+      <div>No expense records match the current filters.</div>
+    </div>
+  </div>
+
+  </div><!-- /tabRecords -->
+
+  <!-- TAB 3: MANAGE HEADS / CONTRACTORS -->
+  <div class="tab-panel" id="tabManage">
+    <div class="panel" id="managePanel">
+      <div class="panel-head" data-target="manageBody"><h3><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span> Manage Heads &amp; Contractors</h3><span class="chev">▾</span></div>
+      <div class="panel-body" id="manageBody">
+        <div class="manage-cols">
+          <div>
+            <label>Maintenance Heads</label>
+            <div class="tag-list" id="headTags"></div>
+            <div class="add-row">
+              <input type="text" id="newHeadInput" placeholder="e.g. Street light maintenance">
+              <button class="btn btn-teal btn-sm" onclick="addHead()">+ Add head</button>
+            </div>
+          </div>
+          <div>
+            <label>Contractors</label>
+            <div class="tag-list" id="contractorTags"></div>
+            <div class="add-row">
+              <input type="text" id="newContractorInput" placeholder="e.g. Sri Balaji Constructions">
+              <button class="btn btn-amber btn-sm" onclick="addContractor()">+ Add contractor</button>
+            </div>
+          </div>
+          <div>
+            <label>Junior Engineers (JE Incharge)</label>
+            <div class="tag-list" id="jeTags"></div>
+            <div class="add-row">
+              <input type="text" id="newJEInput" placeholder="e.g. Er. S. Kumaresan">
+              <button class="btn btn-sm" style="background:var(--navy);color:#fff;" onclick="addJE()">+ Add JE</button>
+            </div>
+          </div>
+          <div>
+            <label>Constituency</label>
+            <div class="tag-list" id="constituencyTags"></div>
+            <div class="add-row">
+              <input type="text" id="newConstituencyInput" placeholder="e.g. Ariankuppam Part">
+              <button class="btn btn-teal btn-sm" onclick="addConstituency()">+ Add constituency</button>
+            </div>
+          </div>
+          <div>
+            <label>Village Panchayat</label>
+            <div class="tag-list" id="villageTags"></div>
+            <div class="add-row">
+              <input type="text" id="newVillageInput" placeholder="e.g. Kirumampakkam VP">
+              <button class="btn btn-amber btn-sm" onclick="addVillage()">+ Add village</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="importPanel">
+      <div class="panel-head" data-target="importBody"><h3><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span> Import Data</h3><span class="chev">▾</span></div>
+      <div class="panel-body" id="importBody">
+
+        <div style="margin-bottom:18px;">
+          <label>Import records from Excel / CSV</label>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px;">
+            Columns recognised (any order, header names must match): <span class="mono">Work ID, Date, Head, Constituency, Village Panchayat, Description, Contractor, JE Incharge, Expenditure (INR), Total Paid (INR), Payment Dates, Latitude, Longitude</span>.
+            Use the app's own Excel export as a ready-made template. New heads/contractors named in the file are added automatically.
+          </div>
+          <input type="file" id="excelImportInput" accept=".xlsx,.xls,.csv" onchange="handleExcelImportFile(this)">
+          <div id="excelImportStatus" style="font-size:12.5px;color:var(--muted);margin-top:8px;"></div>
+        </div>
+
+        <div style="border-top:1px solid var(--line);padding-top:16px;">
+          <label>Restore from backup (.json)</label>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px;">
+            A full backup (heads, contractors, and all records) exported earlier from this app.
+          </div>
+          <input type="file" id="jsonImportInput" accept=".json" onchange="handleJSONImportFile(this)">
+          <div class="btn-row">
+            <button class="btn btn-ghost btn-sm" onclick="exportJSONBackup()">Download full backup (.json)</button>
+          </div>
+          <div id="jsonImportStatus" style="font-size:12.5px;color:var(--muted);margin-top:8px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel" id="securityPanel">
+      <div class="panel-head" data-target="securityBody"><h3><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg></span> Security / Password Lock</h3><span class="chev">▾</span></div>
+      <div class="panel-body" id="securityBody">
+        <div id="securityStatusLine" style="font-size:12.5px;color:var(--muted);margin-bottom:14px;"></div>
+
+        <div id="setPwdFromManage">
+          <label>Set a password</label>
+          <div class="form-grid">
+            <div class="field"><input type="password" id="mgrNewPwd" placeholder="New password (min 4 characters)"></div>
+            <div class="field"><input type="password" id="mgrNewPwd2" placeholder="Confirm new password"></div>
+          </div>
+          <div class="lock-error" id="mgrSetError" style="min-height:auto;margin:0 0 8px;"></div>
+          <button class="btn btn-teal btn-sm" onclick="setPasswordFromManage()">Set password</button>
+        </div>
+
+        <div id="changePwdFromManage" style="display:none;">
+          <label>Change password</label>
+          <div class="form-grid">
+            <div class="field"><input type="password" id="mgrCurPwd" placeholder="Current password"></div>
+            <div class="field"></div>
+            <div class="field"><input type="password" id="mgrChgPwd" placeholder="New password (min 4 characters)"></div>
+            <div class="field"><input type="password" id="mgrChgPwd2" placeholder="Confirm new password"></div>
+          </div>
+          <div class="lock-error" id="mgrChgError" style="min-height:auto;margin:0 0 8px;"></div>
+          <div class="btn-row">
+            <button class="btn btn-teal btn-sm" onclick="changePasswordFromManage()">Update password</button>
+            <button class="btn btn-danger btn-sm" onclick="removePasswordFromManage()">Remove password lock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<button class="fab-add" onclick="openEntryModal()"><span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span> New Entry</button>
+
+<footer class="note">Data is stored locally in this browser only. Use Export (Excel/PDF/KML) regularly to back up records.</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- ENTRY MODAL -->
+<div class="modal-backdrop" id="entryModalBackdrop">
+  <div class="modal">
+    <div class="voucher-edge"></div>
+    <div class="modal-head">
+      <h3 id="entryModalTitle">New Expense Entry</h3>
+      <button class="close-x" onclick="closeEntryModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="entryId">
+      <div style="margin-bottom:12px;">
+        <span class="tag navy" style="cursor:default;" id="entryWorkIdChip">ID: will be assigned on save</span>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="required">Maintenance Head</label>
+          <div class="inline-add">
+            <select id="entryHead"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="required">Date</label>
+          <input type="date" id="entryDate">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Constituency</label>
+          <select id="entryConstituency"><option value="">Select constituency…</option></select>
+        </div>
+        <div class="field">
+          <label>Village Panchayat</label>
+          <select id="entryVillage"><option value="">Select village panchayat…</option></select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="required">Description of Maintenance Activity</label>
+        <textarea id="entryDesc" placeholder="e.g. Replacement of leaking GI pipeline near OHT, Ward 4"></textarea>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="required">Expenditure Incurred (₹)</label>
+          <input type="number" id="entryAmount" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div class="field">
+          <label class="required">Contractor</label>
+          <select id="entryContractor"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label>JE Incharge</label>
+        <select id="entryJE"><option value="">Select junior engineer…</option></select>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:5px;">Add new JEs, constituencies or village panchayats from the Manage tab.</div>
+      </div>
+
+      <div class="field">
+        <label>Geo Tag</label>
+        <div class="geo-box">
+          <div>
+            <div class="coords" id="geoCoords">Not captured</div>
+            <div class="status" id="geoStatus">Capture GPS or set the location manually on the map.</div>
+          </div>
+          <div class="btn-row" style="margin-top:0;">
+            <button type="button" class="btn btn-teal btn-sm" onclick="captureGeo()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg></span> Capture GPS</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="openMapPicker()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 3 6-2.5v-13L15 7 9 4z"/><line x1="9" y1="4" x2="9" y2="17"/><line x1="15" y1="7" x2="15" y2="20"/></svg></span> Pick on map</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Payments (date &amp; amount paid)</label>
+        <div id="paymentRows"></div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="addPaymentRow()">+ Add payment</button>
+        <div class="pay-summary">
+          <span>Expenditure: <b class="mono" id="sumExpend">₹0</b></span>
+          <span>Total paid: <b class="mono" id="sumPaid">₹0</b></span>
+          <span>Balance: <b class="mono" id="sumBalance">₹0</b></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeEntryModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntry()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span> Save entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD CONFIRM MODAL (for locking/unlocking/editing/deleting locked entries) -->
+<div class="modal-backdrop" id="pwdConfirmBackdrop">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-head">
+      <h3>Enter password</h3>
+      <button class="close-x" onclick="closePasswordConfirm()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>This entry is locked. Enter the password to continue.</label><input type="password" id="pwdConfirmInput" placeholder="Password"></div>
+      <div class="lock-error" id="pwdConfirmError"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closePasswordConfirm()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPasswordConfirm()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAP PICKER MODAL -->
+<div class="modal-backdrop" id="mapPickModalBackdrop">
+  <div class="modal" id="mapPickModal" style="max-width:640px;">
+    <div class="modal-head">
+      <h3>Set geo-tag location on map</h3>
+      <button class="close-x" onclick="closeMapPicker()">✕</button>
+    </div>
+    <div class="modal-body" id="mapPickBody">
+      <div class="map-toolbar">
+        <div class="map-toggle-group">
+          <button type="button" class="map-toggle-btn active" id="btnMapStreet" onclick="setMapType('street')">Street</button>
+          <button type="button" class="map-toggle-btn" id="btnMapSat" onclick="setMapType('satellite')">Satellite</button>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnMapFullscreen" onclick="toggleMapFullscreen()">
+          <span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span> Full screen
+        </button>
+      </div>
+      <div id="mapPickContainer"></div>
+      <div class="map-hint">Tap or click on the map to place the pin, or drag the pin to fine-tune. Switch to satellite view for easier landmark spotting.</div>
+      <div class="map-coords-readout" id="mapPickReadout">No location selected yet</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeMapPicker()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmMapPick()">Use this location</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT PICK MODAL -->
+<div class="modal-backdrop" id="pickModalBackdrop">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-head">
+      <h3>Choose records for PDF export</h3>
+      <button class="close-x" onclick="closePickModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="btn-row" style="margin-bottom:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="pickAll(true)">☑ Select all</button>
+        <button class="btn btn-ghost btn-sm" onclick="pickAll(false)">☐ Deselect all</button>
+      </div>
+      <div id="pickList"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closePickModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="exportPDF()"><span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/></svg></span> Generate PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+/* ============================= STATE ============================= */
+const LS_KEY = 'akp_expense_ledger_v1';
+const PWD_KEY = 'akp_pwd_hash_v1';
+
+/* ============================= PASSWORD (used to lock/unlock individual entries) ============================= */
+function simpleHash(str){
+  str = 'akp-salt::'+String(str);
+  let h1 = 0xdeadbeef ^ str.length, h2 = 0x41c6ce57 ^ str.length;
+  for(let i=0;i<str.length;i++){
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(36);
+}
+function hasPassword(){ return !!localStorage.getItem(PWD_KEY); }
+
+/* Generic password-gate: runs callback() immediately if no password is set yet,
+   otherwise prompts for the password in a modal and runs callback() only on success. */
+let pendingPasswordAction = null;
+function requirePassword(callback){
+  if(!hasPassword()){
+    showToast('Set a password under Manage → Security first to use entry locking');
+    return;
+  }
+  pendingPasswordAction = callback;
+  document.getElementById('pwdConfirmInput').value='';
+  document.getElementById('pwdConfirmError').textContent='';
+  document.getElementById('pwdConfirmBackdrop').classList.add('open');
+  setTimeout(()=>document.getElementById('pwdConfirmInput').focus(), 50);
+}
+function closePasswordConfirm(){
+  document.getElementById('pwdConfirmBackdrop').classList.remove('open');
+  pendingPasswordAction = null;
+}
+function submitPasswordConfirm(){
+  const p = document.getElementById('pwdConfirmInput').value;
+  if(simpleHash(p)===localStorage.getItem(PWD_KEY)){
+    const cb = pendingPasswordAction;
+    document.getElementById('pwdConfirmBackdrop').classList.remove('open');
+    pendingPasswordAction = null;
+    if(cb) cb();
+  }else{
+    document.getElementById('pwdConfirmError').textContent = 'Incorrect password.';
+  }
+}
+function renderSecurityPanel(){
+  const statusEl = document.getElementById('securityStatusLine');
+  const setDiv = document.getElementById('setPwdFromManage');
+  const chgDiv = document.getElementById('changePwdFromManage');
+  if(!statusEl) return;
+  if(hasPassword()){
+    statusEl.textContent = 'A password is set. Locked entries can only be edited, unlocked, or deleted with this password.';
+    setDiv.style.display='none';
+    chgDiv.style.display='block';
+  }else{
+    statusEl.textContent = 'No password is set yet — set one below before you can lock entries.';
+    setDiv.style.display='block';
+    chgDiv.style.display='none';
+  }
+}
+function setPasswordFromManage(){
+  const p1 = document.getElementById('mgrNewPwd').value;
+  const p2 = document.getElementById('mgrNewPwd2').value;
+  const errEl = document.getElementById('mgrSetError');
+  if(p1.length<4){ errEl.textContent='Password must be at least 4 characters.'; return; }
+  if(p1!==p2){ errEl.textContent='Passwords do not match.'; return; }
+  localStorage.setItem(PWD_KEY, simpleHash(p1));
+  errEl.textContent='';
+  document.getElementById('mgrNewPwd').value='';
+  document.getElementById('mgrNewPwd2').value='';
+  renderSecurityPanel();
+  showToast('Password set — you can now lock entries');
+}
+function changePasswordFromManage(){
+  const cur = document.getElementById('mgrCurPwd').value;
+  const p1 = document.getElementById('mgrChgPwd').value;
+  const p2 = document.getElementById('mgrChgPwd2').value;
+  const errEl = document.getElementById('mgrChgError');
+  if(simpleHash(cur)!==localStorage.getItem(PWD_KEY)){ errEl.textContent='Current password is incorrect.'; return; }
+  if(p1.length<4){ errEl.textContent='New password must be at least 4 characters.'; return; }
+  if(p1!==p2){ errEl.textContent='New passwords do not match.'; return; }
+  localStorage.setItem(PWD_KEY, simpleHash(p1));
+  errEl.textContent='';
+  document.getElementById('mgrCurPwd').value='';
+  document.getElementById('mgrChgPwd').value='';
+  document.getElementById('mgrChgPwd2').value='';
+  showToast('Password updated');
+}
+function removePasswordFromManage(){
+  const cur = document.getElementById('mgrCurPwd').value;
+  if(simpleHash(cur)!==localStorage.getItem(PWD_KEY)){ document.getElementById('mgrChgError').textContent='Enter your current password to remove the lock.'; return; }
+  const lockedCount = state.entries.filter(e=>e.locked).length;
+  const msg = lockedCount>0
+    ? `Remove the password? This will also unlock all ${lockedCount} currently locked entrie(s), since there'll be no password to protect them.`
+    : 'Remove password protection? You will not be able to lock entries until you set a new one.';
+  if(!confirm(msg)) return;
+  localStorage.removeItem(PWD_KEY);
+  if(lockedCount>0){
+    state.entries.forEach(e=>{ if(e.locked){ e.locked=false; delete e.lockedAt; } });
+    persist();
+  }
+  document.getElementById('mgrCurPwd').value='';
+  renderSecurityPanel();
+  render();
+  showToast('Password lock removed');
+}
+
+let state = loadState();
+
+function defaultState(){
+  return {
+    heads: [
+      {id: uid(), name:'Water supply maintenance'},
+      {id: uid(), name:'Minor civil maintenance work'}
+    ],
+    contractors: [],
+    jes: [],
+    constituencies: [
+      {id: uid(), name:'Ariankuppam Part'},
+      {id: uid(), name:'Manavely'}
+    ],
+    villages: [],
+    nextSeq: 1,
+    entries: []
+  };
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    if(!parsed.heads || !parsed.entries) return defaultState();
+    if(!parsed.jes) parsed.jes = [];
+    if(!parsed.contractors) parsed.contractors = [];
+    if(!parsed.constituencies) parsed.constituencies = [{id:uid(),name:'Ariankuppam Part'},{id:uid(),name:'Manavely'}];
+    if(!parsed.villages) parsed.villages = [];
+    if(!parsed.nextSeq) parsed.nextSeq = (parsed.entries.length||0)+1;
+    return parsed;
+  }catch(e){ return defaultState(); }
+}
+function persist(){
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+function uid(){ return 'x'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); }
+function genWorkId(){
+  const id = 'AKP-'+String(state.nextSeq).padStart(5,'0');
+  state.nextSeq++;
+  return id;
+}
+function ensureWorkId(entry){
+  if(!entry.workId) entry.workId = genWorkId();
+  return entry.workId;
+}
+
+let selected = new Set();
+let pickSelected = new Set(); // for export modal
+
+/* ============================= UTIL ============================= */
+function fmtINR(n){
+  n = Number(n)||0;
+  return '₹' + n.toLocaleString('en-IN', {maximumFractionDigits:2, minimumFractionDigits: n%1?2:0});
+}
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function headName(id){ const h = state.heads.find(h=>h.id===id); return h? h.name : '—'; }
+function contractorName(id){ const c = state.contractors.find(c=>c.id===id); return c? c.name : '—'; }
+function jeName(id){ const j = state.jes.find(j=>j.id===id); return j? j.name : '—'; }
+function constituencyName(id){ const c = state.constituencies.find(c=>c.id===id); return c? c.name : '—'; }
+function villageName(id){ const v = state.villages.find(v=>v.id===id); return v? v.name : '—'; }
+function paidTotal(entry){ return (entry.payments||[]).reduce((s,p)=>s+(Number(p.amount)||0),0); }
+function payStatus(entry){
+  const paid = paidTotal(entry), amt = Number(entry.amount)||0;
+  if(paid<=0) return 'unpaid';
+  if(paid >= amt) return 'paid';
+  return 'partial';
+}
+
+/* ============================= PANEL TOGGLES ============================= */
+document.querySelectorAll('.panel-head').forEach(h=>{
+  h.addEventListener('click', ()=>{
+    const target = document.getElementById(h.dataset.target);
+    target.classList.toggle('hidden');
+    h.classList.toggle('collapsed');
+  });
+});
+
+/* ============================= HEADS / CONTRACTORS / JEs ============================= */
+function renderHeadsAndContractors(){
+  const headTags = document.getElementById('headTags');
+  headTags.innerHTML = state.heads.map(h=>`
+    <span class="tag">${escapeHtml(h.name)} <button onclick="removeHead('${h.id}')" title="Remove">✕</button></span>
+  `).join('') || '<span style="color:var(--muted);font-size:12.5px;">No heads yet.</span>';
+
+  const cTags = document.getElementById('contractorTags');
+  cTags.innerHTML = state.contractors.map(c=>`
+    <span class="tag amber">${escapeHtml(c.name)} <button onclick="removeContractor('${c.id}')" title="Remove">✕</button></span>
+  `).join('') || '<span style="color:var(--muted);font-size:12.5px;">No contractors yet.</span>';
+
+  const jeTags = document.getElementById('jeTags');
+  if(jeTags){
+    jeTags.innerHTML = state.jes.map(j=>`
+      <span class="tag navy">${escapeHtml(j.name)} <button onclick="removeJE('${j.id}')" title="Remove">✕</button></span>
+    `).join('') || '<span style="color:var(--muted);font-size:12.5px;">No junior engineers yet.</span>';
+  }
+
+  const constTags = document.getElementById('constituencyTags');
+  if(constTags){
+    constTags.innerHTML = state.constituencies.map(c=>`
+      <span class="tag">${escapeHtml(c.name)} <button onclick="removeConstituency('${c.id}')" title="Remove">✕</button></span>
+    `).join('') || '<span style="color:var(--muted);font-size:12.5px;">No constituencies yet.</span>';
+  }
+  const villageTags = document.getElementById('villageTags');
+  if(villageTags){
+    villageTags.innerHTML = state.villages.map(v=>`
+      <span class="tag amber">${escapeHtml(v.name)} <button onclick="removeVillage('${v.id}')" title="Remove">✕</button></span>
+    `).join('') || '<span style="color:var(--muted);font-size:12.5px;">No village panchayats yet.</span>';
+  }
+
+  // filter dropdowns
+  fillSelect('fHead', state.heads, true);
+  fillSelect('fContractor', state.contractors, true);
+  fillSelect('fJE', state.jes, true);
+  fillSelect('fConstituency', state.constituencies, true);
+  fillSelect('fVillage', state.villages, true);
+  // entry modal dropdowns
+  fillSelect('entryHead', state.heads, false);
+  fillSelect('entryContractor', state.contractors, false);
+  fillSelect('entryJE', state.jes, true);
+  fillSelect('entryConstituency', state.constituencies, true);
+  fillSelect('entryVillage', state.villages, true);
+
+}
+function fillSelect(id, items, withAllOption){
+  const sel = document.getElementById(id);
+  const cur = sel.value;
+  sel.innerHTML = (withAllOption? sel.querySelector('option')?.outerHTML || '' : '') + items.map(i=>`<option value="${i.id}">${escapeHtml(i.name)}</option>`).join('');
+  if(items.find(i=>i.id===cur)) sel.value = cur;
+}
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function addHead(){
+  const inp = document.getElementById('newHeadInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  if(state.heads.some(h=>h.name.toLowerCase()===name.toLowerCase())){ showToast('Head already exists'); return; }
+  state.heads.push({id:uid(), name});
+  inp.value='';
+  persist(); renderHeadsAndContractors(); render();
+  showToast('Head added');
+}
+function removeHead(id){
+  const inUse = state.entries.some(e=>e.headId===id);
+  if(inUse){ showToast('Cannot remove — head is used by existing entries'); return; }
+  state.heads = state.heads.filter(h=>h.id!==id);
+  persist(); renderHeadsAndContractors(); render();
+}
+function addContractor(){
+  const inp = document.getElementById('newContractorInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  if(state.contractors.some(c=>c.name.toLowerCase()===name.toLowerCase())){ showToast('Contractor already exists'); return; }
+  state.contractors.push({id:uid(), name});
+  inp.value='';
+  persist(); renderHeadsAndContractors(); render();
+  showToast('Contractor added');
+}
+function removeContractor(id){
+  const inUse = state.entries.some(e=>e.contractorId===id);
+  if(inUse){ showToast('Cannot remove — contractor is used by existing entries'); return; }
+  state.contractors = state.contractors.filter(c=>c.id!==id);
+  persist(); renderHeadsAndContractors(); render();
+}
+function addJE(){
+  const inp = document.getElementById('newJEInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  if(state.jes.some(j=>j.name.toLowerCase()===name.toLowerCase())){ showToast('Junior engineer already listed'); return; }
+  state.jes.push({id:uid(), name});
+  inp.value='';
+  persist(); renderHeadsAndContractors(); render();
+  showToast('Junior engineer added');
+}
+function removeJE(id){
+  const inUse = state.entries.some(e=>e.jeId===id);
+  if(inUse){ showToast('Cannot remove — this JE is assigned to existing entries'); return; }
+  state.jes = state.jes.filter(j=>j.id!==id);
+  persist(); renderHeadsAndContractors(); render();
+}
+function addConstituency(){
+  const inp = document.getElementById('newConstituencyInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  if(state.constituencies.some(c=>c.name.toLowerCase()===name.toLowerCase())){ showToast('Constituency already listed'); return; }
+  state.constituencies.push({id:uid(), name});
+  inp.value='';
+  persist(); renderHeadsAndContractors(); render();
+  showToast('Constituency added');
+}
+function removeConstituency(id){
+  const inUse = state.entries.some(e=>e.constituencyId===id);
+  if(inUse){ showToast('Cannot remove — used by existing entries'); return; }
+  state.constituencies = state.constituencies.filter(c=>c.id!==id);
+  persist(); renderHeadsAndContractors(); render();
+}
+function addVillage(){
+  const inp = document.getElementById('newVillageInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  if(state.villages.some(v=>v.name.toLowerCase()===name.toLowerCase())){ showToast('Village panchayat already listed'); return; }
+  state.villages.push({id:uid(), name});
+  inp.value='';
+  persist(); renderHeadsAndContractors(); render();
+  showToast('Village panchayat added');
+}
+function removeVillage(id){
+  const inUse = state.entries.some(e=>e.villageId===id);
+  if(inUse){ showToast('Cannot remove — used by existing entries'); return; }
+  state.villages = state.villages.filter(v=>v.id!==id);
+  persist(); renderHeadsAndContractors(); render();
+}
+
+/* ============================= FILTERS ============================= */
+['fHead','fContractor','fJE','fConstituency','fVillage','fFrom','fTo','fPay','fGeo','fSearch'].forEach(id=>{
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.getElementById(id).addEventListener('input', render);
+    document.getElementById(id).addEventListener('change', render);
+  });
+});
+function resetFilters(){
+  ['fHead','fContractor','fJE','fConstituency','fVillage','fFrom','fTo','fPay','fGeo','fSearch'].forEach(id=>document.getElementById(id).value='');
+  render();
+}
+function getFiltered(){
+  const fHead = document.getElementById('fHead').value;
+  const fContractor = document.getElementById('fContractor').value;
+  const fJE = document.getElementById('fJE').value;
+  const fConstituency = document.getElementById('fConstituency').value;
+  const fVillage = document.getElementById('fVillage').value;
+  const fFrom = document.getElementById('fFrom').value;
+  const fTo = document.getElementById('fTo').value;
+  const fPay = document.getElementById('fPay').value;
+  const fGeo = document.getElementById('fGeo').value;
+  const fSearch = document.getElementById('fSearch').value.trim().toLowerCase();
+
+  return state.entries.filter(e=>{
+    if(fHead && e.headId!==fHead) return false;
+    if(fContractor && e.contractorId!==fContractor) return false;
+    if(fJE && e.jeId!==fJE) return false;
+    if(fConstituency && e.constituencyId!==fConstituency) return false;
+    if(fVillage && e.villageId!==fVillage) return false;
+    if(fFrom && e.date < fFrom) return false;
+    if(fTo && e.date > fTo) return false;
+    if(fPay && payStatus(e)!==fPay) return false;
+    if(fGeo==='yes' && !e.geo) return false;
+    if(fGeo==='no' && e.geo) return false;
+    if(fSearch && !(e.description||'').toLowerCase().includes(fSearch)) return false;
+    return true;
+  }).sort((a,b)=> b.date.localeCompare(a.date));
+}
+
+/* ============================= RENDER: DASHBOARD ============================= */
+function renderDashboard(filtered){
+  const totalExpend = filtered.reduce((s,e)=>s+(Number(e.amount)||0),0);
+  const totalPaid = filtered.reduce((s,e)=>s+paidTotal(e),0);
+  const totalPending = totalExpend-totalPaid;
+  const geoCount = filtered.filter(e=>e.geo).length;
+
+  const cards = [
+    {lbl:'Total Expenditure', val:fmtINR(totalExpend), cls:'navy'},
+    {lbl:'Total Paid', val:fmtINR(totalPaid), cls:'teal-'},
+    {lbl:'Pending Balance', val:fmtINR(totalPending), cls:'danger'},
+    {lbl:'Records', val:filtered.length, cls:'amber'},
+    {lbl:'Geo-tagged', val:geoCount+' / '+filtered.length, cls:'navy'},
+  ];
+  document.getElementById('statCards').innerHTML = cards.map(c=>`
+    <div class="stat-card ${c.cls==='danger'?'danger':c.cls==='amber'?'amber':c.cls==='navy'?'navy':''}">
+      <div class="lbl">${c.lbl}</div>
+      <div class="val">${c.val}</div>
+    </div>
+  `).join('');
+
+  renderTrendChart(filtered);
+  renderHeadChart(filtered, totalExpend);
+  renderHeadCompareChart(filtered);
+  renderHeadBreakdown(filtered);
+}
+
+function computeHeadStats(filtered){
+  const byHead = {};
+  state.heads.forEach(h=>{ byHead[h.id] = {id:h.id, name:h.name, amount:0, paid:0, count:0, geo:0}; });
+  filtered.forEach(e=>{
+    if(!byHead[e.headId]) byHead[e.headId] = {id:e.headId, name:headName(e.headId), amount:0, paid:0, count:0, geo:0};
+    const s = byHead[e.headId];
+    s.amount += Number(e.amount)||0;
+    s.paid += paidTotal(e);
+    s.count += 1;
+    if(e.geo) s.geo += 1;
+  });
+  return Object.values(byHead).sort((a,b)=>b.amount-a.amount);
+}
+const HEAD_PALETTE = ['#1B8A9C','#C97A2B','#122C42','#7CB9A8','#B23A48','#8A5314','#5C6B72','#4C7A9E'];
+
+function renderHeadCompareChart(filtered){
+  const stats = computeHeadStats(filtered).filter(s=>s.count>0 || s.amount>0);
+  const el = document.getElementById('headCompareChart');
+  if(stats.length===0){ el.innerHTML = '<div style="color:var(--muted);font-size:12.5px;padding:14px 0;">No data to chart yet.</div>'; return; }
+  const max = Math.max(...stats.map(s=>Math.max(s.amount,s.paid)), 1);
+  const rowH = 46, W = 640, leftLabel = 150, chartW = W-leftLabel-70, H = stats.length*rowH+10;
+  let rows = stats.map((s,i)=>{
+    const y = i*rowH+8;
+    const wAmt = (s.amount/max)*chartW;
+    const wPaid = (s.paid/max)*chartW;
+    const color = HEAD_PALETTE[i%HEAD_PALETTE.length];
+    return `
+      <text x="${leftLabel-10}" y="${y+12}" font-size="11" fill="#122C42" text-anchor="end" font-family="IBM Plex Sans" font-weight="600">${escapeXmlLite(truncate(s.name,18))}</text>
+      <rect x="${leftLabel}" y="${y}" width="${wAmt.toFixed(1)}" height="12" fill="${color}" opacity="0.35" rx="2"></rect>
+      <text x="${(leftLabel+wAmt+6).toFixed(1)}" y="${y+10}" font-size="9" fill="#647178" font-family="IBM Plex Mono">${fmtINR(s.amount)}</text>
+      <rect x="${leftLabel}" y="${y+15}" width="${wPaid.toFixed(1)}" height="12" fill="${color}" rx="2"></rect>
+      <text x="${(leftLabel+wPaid+6).toFixed(1)}" y="${y+25}" font-size="9" fill="#647178" font-family="IBM Plex Mono">${fmtINR(s.paid)} paid</text>
+    `;
+  }).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${Math.min(H,340)}">${rows}</svg>
+    <div class="legend"><span><span class="dot" style="background:#122C42;opacity:.35"></span>Expenditure</span><span><span class="dot" style="background:#122C42;"></span>Paid</span></div>`;
+}
+function truncate(s,n){ s=String(s||''); return s.length>n? s.slice(0,n-1)+'…' : s; }
+function escapeXmlLite(s){ return escapeHtml(s); }
+
+function renderHeadBreakdown(filtered){
+  const stats = computeHeadStats(filtered);
+  const grid = document.getElementById('headBreakdownGrid');
+  const visible = stats.filter(s=>s.count>0);
+  if(visible.length===0){
+    grid.innerHTML = '<div style="color:var(--muted);font-size:12.5px;padding:6px 0;">No records for the current filter yet.</div>';
+    return;
+  }
+  grid.innerHTML = visible.map((s,i)=>{
+    const color = HEAD_PALETTE[stats.indexOf(s)%HEAD_PALETTE.length];
+    const pending = s.amount - s.paid;
+    const pct = s.amount>0? Math.min(100,(s.paid/s.amount)*100) : 0;
+    return `
+    <div class="head-card" style="border-top-color:${color};">
+      <div class="hname">${escapeHtml(s.name)} <span class="n">${s.count} entr${s.count===1?'y':'ies'}</span></div>
+      <div class="htotal">${fmtINR(s.amount)}</div>
+      <div class="head-bar"><div class="fill" style="width:${pct.toFixed(1)}%;"></div></div>
+      <div class="head-stats"><span>Paid: <b>${fmtINR(s.paid)}</b></span><span>Pending: <b>${fmtINR(pending)}</b></span></div>
+      <div class="hmeta"><span class="icon" style="gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.1"/></svg> ${s.geo} geo-tagged</span><span>${pct.toFixed(0)}% recovered</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderTrendChart(filtered){
+  const byMonth = {};
+  filtered.forEach(e=>{
+    const m = (e.date||'').slice(0,7);
+    if(!m) return;
+    byMonth[m] = (byMonth[m]||0) + (Number(e.amount)||0);
+  });
+  const months = Object.keys(byMonth).sort().slice(-8);
+  const el = document.getElementById('trendChart');
+  if(months.length===0){ el.innerHTML = '<div style="color:var(--muted);font-size:12.5px;padding:20px 0;">No data to chart yet.</div>'; return; }
+  const max = Math.max(...months.map(m=>byMonth[m]), 1);
+  const W=560, H=150, pad=28, barW = (W-pad*2)/months.length*0.6, gap=(W-pad*2)/months.length;
+  let bars = months.map((m,i)=>{
+    const h = (byMonth[m]/max)*(H-40);
+    const x = pad + i*gap + (gap-barW)/2;
+    const y = H-30-h;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" fill="#1B8A9C" rx="3"></rect>
+      <text x="${(x+barW/2).toFixed(1)}" y="${H-14}" font-size="9" fill="#647178" text-anchor="middle" font-family="IBM Plex Mono">${m.slice(2).replace('-','/')}</text>
+      <text x="${(x+barW/2).toFixed(1)}" y="${(y-4).toFixed(1)}" font-size="8.5" fill="#122C42" text-anchor="middle" font-family="IBM Plex Mono">${Math.round(byMonth[m]/1000)}k</text>`;
+  }).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${bars}
+    <line x1="${pad}" y1="${H-30}" x2="${W-pad}" y2="${H-30}" stroke="#DCE1DA"/></svg>`;
+}
+
+function renderHeadChart(filtered, total){
+  const byHead = {};
+  filtered.forEach(e=>{ byHead[e.headId] = (byHead[e.headId]||0) + (Number(e.amount)||0); });
+  const palette = ['#1B8A9C','#C97A2B','#122C42','#7CB9A8','#B23A48','#8A5314','#5C6B72'];
+  const el = document.getElementById('headChart');
+  const legendEl = document.getElementById('headLegend');
+  const keys = Object.keys(byHead);
+  if(keys.length===0 || total<=0){ el.innerHTML = '<div style="color:var(--muted);font-size:12.5px;padding:20px 0;">No data to chart yet.</div>'; legendEl.innerHTML=''; return; }
+  const cx=90, cy=90, r=68, innerR=38;
+  let angle=-90, paths='';
+  keys.forEach((k,i)=>{
+    const val = byHead[k];
+    const frac = val/total;
+    const sweep = frac*360;
+    const large = sweep>180?1:0;
+    const x1 = cx + r*Math.cos(angle*Math.PI/180);
+    const y1 = cy + r*Math.sin(angle*Math.PI/180);
+    const end = angle+sweep;
+    const x2 = cx + r*Math.cos(end*Math.PI/180);
+    const y2 = cy + r*Math.sin(end*Math.PI/180);
+    const ix1 = cx + innerR*Math.cos(angle*Math.PI/180);
+    const iy1 = cy + innerR*Math.sin(angle*Math.PI/180);
+    const ix2 = cx + innerR*Math.cos(end*Math.PI/180);
+    const iy2 = cy + innerR*Math.sin(end*Math.PI/180);
+    paths += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix2.toFixed(2)},${iy2.toFixed(2)} A${innerR},${innerR} 0 ${large} 0 ${ix1.toFixed(2)},${iy1.toFixed(2)} Z" fill="${palette[i%palette.length]}"></path>`;
+    angle = end;
+  });
+  el.innerHTML = `<svg viewBox="0 0 180 180" width="180" height="180" style="display:block;margin:0 auto;">${paths}</svg>`;
+  legendEl.innerHTML = keys.map((k,i)=>`<span><span class="dot" style="background:${palette[i%palette.length]}"></span>${escapeHtml(headName(k))} — ${fmtINR(byHead[k])}</span>`).join('');
+}
+
+/* ============================= RENDER: TABLE ============================= */
+function render(){
+  const filtered = getFiltered();
+  renderDashboard(filtered);
+
+  const tbody = document.getElementById('tblBody');
+  const empty = document.getElementById('emptyState');
+  if(filtered.length===0){
+    tbody.innerHTML='';
+    empty.style.display='block';
+  }else{
+    empty.style.display='none';
+    tbody.innerHTML = filtered.map(e=>{
+      const paid = paidTotal(e);
+      const st = payStatus(e);
+      const lockIconSvg = e.locked
+        ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>'
+        : '';
+      const editOnclick = e.locked ? `requirePassword(()=>openEntryModal('${e.id}'))` : `openEntryModal('${e.id}')`;
+      const deleteOnclick = e.locked ? `requirePassword(()=>deleteEntry('${e.id}'))` : `deleteEntry('${e.id}')`;
+      const lockToggleOnclick = e.locked ? `requirePassword(()=>unlockEntry('${e.id}'))` : `lockEntry('${e.id}')`;
+      const lockToggleTitle = e.locked ? 'Locked — click to unlock (password required)' : 'Verify & lock this entry';
+      const lockToggleIcon = e.locked
+        ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>'
+        : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M7 10V6.5a5 5 0 0 1 9-3"/></svg>';
+      return `<tr>
+        <td><input type="checkbox" ${selected.has(e.id)?'checked':''} onclick="toggleSelect('${e.id}')"></td>
+        <td class="mono" style="white-space:nowrap;font-weight:600;color:var(--navy);">${escapeHtml(e.workId||'—')}${e.locked?` <span class="entry-lock-pill">${lockIconSvg} Locked</span>`:''}</td>
+        <td class="mono">${e.date||''}</td>
+        <td>${escapeHtml(headName(e.headId))}</td>
+        <td class="desc-cell"><div class="truncate" title="${escapeHtml(e.description||'')}">${escapeHtml(e.description||'')}</div></td>
+        <td>${escapeHtml(contractorName(e.contractorId))}</td>
+        <td>${escapeHtml(jeName(e.jeId))}</td>
+        <td>${escapeHtml(constituencyName(e.constituencyId))}</td>
+        <td>${escapeHtml(villageName(e.villageId))}</td>
+        <td class="amt mono">${fmtINR(e.amount)}</td>
+        <td class="amt mono">${fmtINR(paid)}</td>
+        <td><span class="pill ${st}">${st==='paid'?'Fully paid':st==='partial'?'Partial':'Unpaid'}</span></td>
+        <td>${e.geo? `<span class="geo-chip icon" onclick="openMap(${e.geo.lat},${e.geo.lng})" style="gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.1"/></svg> view</span>` : '<span style="color:var(--muted);">—</span>'}</td>
+        <td class="row-actions">
+          <button class="icon-btn" onclick="${lockToggleOnclick}" title="${lockToggleTitle}" style="${e.locked?'color:var(--amber);border-color:#E9CDA4;':''}">${lockToggleIcon}</button>
+          <button class="icon-btn" onclick="${editOnclick}" title="Edit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+          <button class="icon-btn" onclick="${deleteOnclick}" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('selCount').textContent = `${selected.size} selected · ${filtered.length} shown`;
+  document.getElementById('selectAllBox').checked = filtered.length>0 && filtered.every(e=>selected.has(e.id));
+  const badge = document.getElementById('tabRecordsCount');
+  if(badge) badge.textContent = state.entries.length;
+}
+function openMap(lat,lng){ window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank'); }
+
+function toggleSelect(id){
+  if(selected.has(id)) selected.delete(id); else selected.add(id);
+  render();
+}
+function toggleSelectAllBox(box){
+  const filtered = getFiltered();
+  if(box.checked) filtered.forEach(e=>selected.add(e.id));
+  else filtered.forEach(e=>selected.delete(e.id));
+  render();
+}
+function selectAllVisible(){ getFiltered().forEach(e=>selected.add(e.id)); render(); }
+function clearSelection(){ selected.clear(); render(); }
+
+/* ============================= ENTRY MODAL ============================= */
+let currentGeo = null;
+let paymentDraft = [];
+
+function openEntryModal(id){
+  fillSelect('entryHead', state.heads, false);
+  fillSelect('entryContractor', state.contractors, false);
+  fillSelect('entryJE', state.jes, true);
+  fillSelect('entryConstituency', state.constituencies, true);
+  fillSelect('entryVillage', state.villages, true);
+  document.getElementById('entryJE').value='';
+  document.getElementById('entryConstituency').value='';
+  document.getElementById('entryVillage').value='';
+  document.getElementById('entryId').value = id||'';
+  currentGeo = null;
+  paymentDraft = [];
+
+  if(id){
+    const e = state.entries.find(x=>x.id===id);
+    document.getElementById('entryModalTitle').textContent = 'Edit Expense Entry';
+    const idChip = document.getElementById('entryWorkIdChip');
+    idChip.textContent = 'ID: '+(e.workId||'—')+(e.locked? '  🔒 Verified & locked'+(e.lockedAt?' on '+e.lockedAt:'') : '');
+    document.getElementById('entryHead').value = e.headId;
+    document.getElementById('entryDate').value = e.date;
+    document.getElementById('entryDesc').value = e.description;
+    document.getElementById('entryAmount').value = e.amount;
+    document.getElementById('entryContractor').value = e.contractorId;
+    document.getElementById('entryJE').value = e.jeId||'';
+    document.getElementById('entryConstituency').value = e.constituencyId||'';
+    document.getElementById('entryVillage').value = e.villageId||'';
+    currentGeo = e.geo? {...e.geo} : null;
+    paymentDraft = (e.payments||[]).map(p=>({...p}));
+  }else{
+    document.getElementById('entryModalTitle').textContent = 'New Expense Entry';
+    document.getElementById('entryWorkIdChip').textContent = 'ID: will be assigned on save';
+    document.getElementById('entryDate').value = todayISO();
+    document.getElementById('entryDesc').value='';
+    document.getElementById('entryAmount').value='';
+  }
+  updateGeoBox();
+  renderPaymentRows();
+  document.getElementById('entryModalBackdrop').classList.add('open');
+}
+function closeEntryModal(){
+  document.getElementById('entryModalBackdrop').classList.remove('open');
+}
+function updateGeoBox(){
+  const c = document.getElementById('geoCoords');
+  const s = document.getElementById('geoStatus');
+  if(currentGeo){
+    c.textContent = `${currentGeo.lat.toFixed(6)}, ${currentGeo.lng.toFixed(6)}`;
+    s.textContent = `Captured ${currentGeo.capturedAt||''} · accuracy ±${Math.round(currentGeo.accuracy||0)}m`;
+  }else{
+    c.textContent = 'Not captured';
+    s.textContent = 'Tap capture to record the current GPS location for this work.';
+  }
+}
+function captureGeo(){
+  if(!navigator.geolocation){ showToast('Geolocation not supported on this device'); return; }
+  document.getElementById('geoStatus').textContent = 'Capturing…';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    currentGeo = {
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+      accuracy: pos.coords.accuracy,
+      capturedAt: new Date().toLocaleString('en-IN')
+    };
+    updateGeoBox();
+    showToast('Location captured');
+  }, err=>{
+    document.getElementById('geoStatus').textContent = 'Could not capture location: '+err.message;
+  }, {enableHighAccuracy:true, timeout:12000});
+}
+
+/* ============================= MAP PICKER (manual geo-tag) ============================= */
+const ARIANKUPPAM_DEFAULT = {lat:11.8890, lng:79.7975};
+let pickerMap = null, pickerMarker = null, pickerLatLng = null;
+let pickerLayers = null, pickerCurrentType = 'street', pickerFullscreen = false;
+
+function openMapPicker(){
+  document.getElementById('mapPickModalBackdrop').classList.add('open');
+  const start = currentGeo || ARIANKUPPAM_DEFAULT;
+  pickerLatLng = {lat:start.lat, lng:start.lng};
+  updateMapReadout();
+  setTimeout(()=>{
+    if(typeof L==='undefined'){
+      document.getElementById('mapPickContainer').innerHTML = '<div style="padding:20px;font-size:13px;color:var(--muted);">Map library failed to load — check internet connection. You can still use "Capture GPS" instead.</div>';
+      return;
+    }
+    if(!pickerMap){
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+        iconUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+        shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
+      });
+      pickerMap = L.map('mapPickContainer').setView([start.lat, start.lng], currentGeo? 17 : 14);
+      pickerLayers = {
+        street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19, attribution: '© OpenStreetMap contributors'
+        }),
+        satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19, attribution: '© Esri, Maxar, Earthstar Geographics'
+        })
+      };
+      pickerLayers.street.addTo(pickerMap);
+      pickerCurrentType = 'street';
+      pickerMarker = L.marker([start.lat, start.lng], {draggable:true}).addTo(pickerMap);
+      pickerMarker.on('dragend', ()=>{
+        const p = pickerMarker.getLatLng();
+        pickerLatLng = {lat:p.lat, lng:p.lng};
+        updateMapReadout();
+      });
+      pickerMap.on('click', (ev)=>{
+        pickerLatLng = {lat:ev.latlng.lat, lng:ev.latlng.lng};
+        pickerMarker.setLatLng(ev.latlng);
+        updateMapReadout();
+      });
+    }else{
+      pickerMap.setView([start.lat, start.lng], currentGeo? 17 : 14);
+      pickerMarker.setLatLng([start.lat, start.lng]);
+    }
+    pickerMap.invalidateSize();
+  }, 60);
+}
+function setMapType(type){
+  if(!pickerMap || !pickerLayers || type===pickerCurrentType) return;
+  pickerMap.removeLayer(pickerLayers[pickerCurrentType]);
+  pickerLayers[type].addTo(pickerMap);
+  pickerCurrentType = type;
+  document.getElementById('btnMapStreet').classList.toggle('active', type==='street');
+  document.getElementById('btnMapSat').classList.toggle('active', type==='satellite');
+}
+function toggleMapFullscreen(){
+  pickerFullscreen = !pickerFullscreen;
+  document.getElementById('mapPickModal').classList.toggle('map-fullscreen', pickerFullscreen);
+  document.getElementById('mapPickModalBackdrop').classList.toggle('fullscreen-backdrop', pickerFullscreen);
+  setTimeout(()=>{ if(pickerMap) pickerMap.invalidateSize(); }, 150);
+}
+function updateMapReadout(){
+  const el = document.getElementById('mapPickReadout');
+  if(el && pickerLatLng) el.textContent = `Selected: ${pickerLatLng.lat.toFixed(6)}, ${pickerLatLng.lng.toFixed(6)}`;
+}
+function closeMapPicker(){
+  document.getElementById('mapPickModalBackdrop').classList.remove('open');
+  if(pickerFullscreen) toggleMapFullscreen();
+}
+function confirmMapPick(){
+  if(!pickerLatLng){ showToast('Tap the map to place a pin first'); return; }
+  currentGeo = {
+    lat: pickerLatLng.lat,
+    lng: pickerLatLng.lng,
+    accuracy: 0,
+    capturedAt: 'Manually pinned '+new Date().toLocaleString('en-IN')
+  };
+  updateGeoBox();
+  closeMapPicker();
+  showToast('Location set from map');
+}
+
+function renderPaymentRows(){
+  const el = document.getElementById('paymentRows');
+  el.innerHTML = paymentDraft.map((p,i)=>`
+    <div class="payment-row">
+      <div><label style="margin-bottom:3px;">Payment date</label><input type="date" value="${p.date||''}" onchange="paymentDraft[${i}].date=this.value; updatePaySummary();"></div>
+      <div><label style="margin-bottom:3px;">Amount paid (₹)</label><input type="number" min="0" step="0.01" value="${p.amount||''}" onchange="paymentDraft[${i}].amount=this.value; updatePaySummary();"></div>
+      <button type="button" class="icon-btn" onclick="removePaymentRow(${i})" title="Remove">✕</button>
+    </div>
+  `).join('') || '<div style="color:var(--muted);font-size:12px;margin-bottom:8px;">No payments recorded yet.</div>';
+  updatePaySummary();
+}
+function addPaymentRow(){
+  paymentDraft.push({date: todayISO(), amount:''});
+  renderPaymentRows();
+}
+function removePaymentRow(i){
+  paymentDraft.splice(i,1);
+  renderPaymentRows();
+}
+function updatePaySummary(){
+  const amt = Number(document.getElementById('entryAmount').value)||0;
+  const paid = paymentDraft.reduce((s,p)=>s+(Number(p.amount)||0),0);
+  document.getElementById('sumExpend').textContent = fmtINR(amt);
+  document.getElementById('sumPaid').textContent = fmtINR(paid);
+  document.getElementById('sumBalance').textContent = fmtINR(amt-paid);
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('entryAmount').addEventListener('input', updatePaySummary);
+});
+
+function saveEntry(){
+  const headId = document.getElementById('entryHead').value;
+  const date = document.getElementById('entryDate').value;
+  const description = document.getElementById('entryDesc').value.trim();
+  const amount = document.getElementById('entryAmount').value;
+  const contractorId = document.getElementById('entryContractor').value;
+  const jeId = document.getElementById('entryJE').value;
+  const constituencyId = document.getElementById('entryConstituency').value;
+  const villageId = document.getElementById('entryVillage').value;
+
+  if(!headId){ showToast('Select a maintenance head (add one under Manage if list is empty)'); return; }
+  if(!date){ showToast('Select a date'); return; }
+  if(!description){ showToast('Enter description of maintenance activity'); return; }
+  if(!amount || Number(amount)<=0){ showToast('Enter expenditure amount'); return; }
+  if(!contractorId){ showToast('Select a contractor (add one under Manage if list is empty)'); return; }
+
+  const cleanPayments = paymentDraft.filter(p=>p.date && Number(p.amount)>0).map(p=>({date:p.date, amount:Number(p.amount)}));
+
+  const id = document.getElementById('entryId').value;
+  if(id){
+    const e = state.entries.find(x=>x.id===id);
+    Object.assign(e, {headId, date, description, amount:Number(amount), contractorId, jeId, constituencyId, villageId, geo:currentGeo, payments:cleanPayments});
+  }else{
+    const entry = {id:uid(), headId, date, description, amount:Number(amount), contractorId, jeId, constituencyId, villageId, geo:currentGeo, payments:cleanPayments, locked:false, createdAt:new Date().toISOString()};
+    ensureWorkId(entry);
+    state.entries.push(entry);
+  }
+  persist();
+  closeEntryModal();
+  renderHeadsAndContractors();
+  render();
+  switchTab('tabRecords');
+  showToast('Entry saved');
+}
+function deleteEntry(id){
+  if(!confirm('Delete this expense entry? This cannot be undone.')) return;
+  state.entries = state.entries.filter(e=>e.id!==id);
+  selected.delete(id);
+  persist(); render();
+  showToast('Entry deleted');
+}
+function lockEntry(id){
+  if(!hasPassword()){ showToast('Set a password under Manage → Security first to lock entries'); return; }
+  const e = state.entries.find(x=>x.id===id);
+  if(!e) return;
+  e.locked = true;
+  e.lockedAt = new Date().toLocaleString('en-IN');
+  persist(); render();
+  showToast('Entry verified & locked');
+}
+function unlockEntry(id){
+  const e = state.entries.find(x=>x.id===id);
+  if(!e) return;
+  e.locked = false;
+  delete e.lockedAt;
+  persist(); render();
+  showToast('Entry unlocked');
+}
+
+/* ============================= EXPORT: PDF (with select/deselect) ============================= */
+function openExportPickModal(){
+  const filtered = getFiltered();
+  if(filtered.length===0){ showToast('No filtered records to export'); return; }
+  pickSelected = new Set(selected.size? Array.from(selected).filter(id=>filtered.some(f=>f.id===id)) : filtered.map(e=>e.id));
+  renderPickList(filtered);
+  document.getElementById('pickModalBackdrop').classList.add('open');
+}
+function closePickModal(){ document.getElementById('pickModalBackdrop').classList.remove('open'); }
+function renderPickList(filtered){
+  document.getElementById('pickList').innerHTML = filtered.map(e=>`
+    <div class="pick-row">
+      <input type="checkbox" ${pickSelected.has(e.id)?'checked':''} onclick="togglePick('${e.id}')">
+      <div>
+        <div><b class="mono">${escapeHtml(e.workId||'—')}</b> · <b>${escapeHtml(headName(e.headId))}</b> — ${escapeHtml((e.description||'').slice(0,60))}</div>
+        <div class="meta mono">${e.date} · ${fmtINR(e.amount)} · ${escapeHtml(contractorName(e.contractorId))}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function togglePick(id){
+  if(pickSelected.has(id)) pickSelected.delete(id); else pickSelected.add(id);
+}
+function pickAll(val){
+  const filtered = getFiltered();
+  if(val) filtered.forEach(e=>pickSelected.add(e.id));
+  else pickSelected.clear();
+  renderPickList(filtered);
+}
+function fmtINRPdf(n){
+  n = Number(n)||0;
+  return 'Rs. ' + n.toLocaleString('en-IN', {maximumFractionDigits:2, minimumFractionDigits: n%1?2:0});
+}
+function exportPDF(){
+  if(pickSelected.size===0){ showToast('Select at least one record'); return; }
+  if(typeof window.jspdf==='undefined'){ showToast('PDF library failed to load — check internet connection'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'landscape', unit:'pt', format:'a4'});
+  const rows = state.entries.filter(e=>pickSelected.has(e.id)).sort((a,b)=>a.date.localeCompare(b.date));
+
+  doc.setFontSize(13);
+  doc.setTextColor(18,44,66);
+  doc.text('Ariankuppam Commune Panchayat — Maintenance Expense Ledger', 30, 32);
+  doc.setFontSize(9);
+  doc.setTextColor(100,110,115);
+  doc.text('Generated: '+new Date().toLocaleString('en-IN')+'  ·  Records: '+rows.length, 30, 46);
+
+  const body = rows.map(e=>[
+    e.workId||'—', e.date, headName(e.headId),
+    [constituencyName(e.constituencyId), villageName(e.villageId)].filter(v=>v && v!=='—').join(' / ') || '—',
+    (e.description||''), contractorName(e.contractorId), jeName(e.jeId),
+    fmtINRPdf(e.amount), fmtINRPdf(paidTotal(e)), payStatus(e)==='paid'?'Paid':payStatus(e)==='partial'?'Partial':'Unpaid',
+    e.geo? (e.geo.lat.toFixed(5)+', '+e.geo.lng.toFixed(5)) : '—'
+  ]);
+  const totalAmt = rows.reduce((s,e)=>s+(Number(e.amount)||0),0);
+  const totalPaid = rows.reduce((s,e)=>s+paidTotal(e),0);
+
+  doc.autoTable({
+    startY:58,
+    margin:{left:24, right:24},
+    tableWidth:'wrap',
+    head:[['Work ID','Date','Head','Constituency / Village','Description','Contractor','JE Incharge','Amount','Paid','Status','Geo (lat,lng)']],
+    body:body,
+    foot:[['','','','','','','Total', fmtINRPdf(totalAmt), fmtINRPdf(totalPaid), '', '']],
+    styles:{fontSize:7.5, cellPadding:4, textColor:[24,34,40], overflow:'linebreak', valign:'middle'},
+    headStyles:{fillColor:[18,44,66], textColor:255, fontSize:7.5},
+    footStyles:{fillColor:[228,241,242], textColor:[18,44,66], fontStyle:'bold', fontSize:7.5},
+    alternateRowStyles:{fillColor:[247,249,246]},
+    columnStyles:{
+      0:{cellWidth:48},
+      1:{cellWidth:42},
+      2:{cellWidth:68},
+      3:{cellWidth:82},
+      4:{cellWidth:150},
+      5:{cellWidth:70},
+      6:{cellWidth:56},
+      7:{cellWidth:54, halign:'right'},
+      8:{cellWidth:54, halign:'right'},
+      9:{cellWidth:38},
+      10:{cellWidth:60}
+    }
+  });
+  doc.save('ariankuppam_maintenance_expenses_'+todayISO()+'.pdf');
+  closePickModal();
+  showToast('PDF exported');
+}
+
+/* ============================= EXPORT: EXCEL ============================= */
+function exportExcel(){
+  const filtered = getFiltered();
+  if(filtered.length===0){ showToast('No filtered records to export'); return; }
+  if(typeof XLSX==='undefined'){ showToast('Excel library failed to load — check internet connection'); return; }
+  const rows = filtered.map(e=>({
+    'Work ID': e.workId||'',
+    'Date': e.date,
+    'Head': headName(e.headId),
+    'Constituency': constituencyName(e.constituencyId)==='—'? '' : constituencyName(e.constituencyId),
+    'Village Panchayat': villageName(e.villageId)==='—'? '' : villageName(e.villageId),
+    'Description': e.description,
+    'Contractor': contractorName(e.contractorId),
+    'JE Incharge': jeName(e.jeId)==='—'? '' : jeName(e.jeId),
+    'Expenditure (INR)': Number(e.amount)||0,
+    'Total Paid (INR)': paidTotal(e),
+    'Balance (INR)': (Number(e.amount)||0) - paidTotal(e),
+    'Payment Status': payStatus(e),
+    'Payment Dates': (e.payments||[]).map(p=>p.date+':'+p.amount).join(' | '),
+    'Latitude': e.geo? e.geo.lat : '',
+    'Longitude': e.geo? e.geo.lng : '',
+    'Verified/Locked': e.locked? 'Yes' : 'No'
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:12},{wch:11},{wch:24},{wch:18},{wch:18},{wch:36},{wch:20},{wch:16},{wch:14},{wch:14},{wch:12},{wch:14},{wch:26},{wch:11},{wch:11},{wch:14}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
+  XLSX.writeFile(wb, 'ariankuppam_maintenance_expenses_'+todayISO()+'.xlsx');
+  showToast('Excel exported');
+}
+
+/* ============================= EXPORT: KML ============================= */
+function exportKML(){
+  const filtered = getFiltered().filter(e=>e.geo);
+  if(filtered.length===0){ showToast('No geo-tagged records in current filter'); return; }
+  const placemarks = filtered.map(e=>{
+    const name = escapeXml((e.workId? e.workId+' — ':'')+headName(e.headId)+' — '+e.date);
+    const desc = escapeXml(`${e.description||''}\nConstituency: ${constituencyName(e.constituencyId)}\nVillage Panchayat: ${villageName(e.villageId)}\nContractor: ${contractorName(e.contractorId)}\nJE Incharge: ${jeName(e.jeId)}\nExpenditure: ${fmtINR(e.amount)}\nPaid: ${fmtINR(paidTotal(e))}\nStatus: ${payStatus(e)}`);
+    return `<Placemark>
+      <name>${name}</name>
+      <description>${desc}</description>
+      <Point><coordinates>${e.geo.lng},${e.geo.lat},0</coordinates></Point>
+    </Placemark>`;
+  }).join('\n');
+  const kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>Ariankuppam Maintenance Expenses</name>
+  ${placemarks}
+</Document>
+</kml>`;
+  downloadFile(kml, 'ariankuppam_maintenance_expenses_'+todayISO()+'.kml', 'application/vnd.google-earth.kml+xml');
+  showToast('KML exported');
+}
+function escapeXml(s){
+  return String(s??'').replace(/[<>&'"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]));
+}
+function downloadFile(content, filename, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ============================= IMPORT: EXCEL / CSV ============================= */
+function findHeadIdByName(name){
+  if(!name) return null;
+  const n = String(name).trim().toLowerCase();
+  let h = state.heads.find(h=>h.name.toLowerCase()===n);
+  if(!h){ h = {id:uid(), name:String(name).trim()}; state.heads.push(h); }
+  return h.id;
+}
+function findContractorIdByName(name){
+  if(!name) return null;
+  const n = String(name).trim().toLowerCase();
+  let c = state.contractors.find(c=>c.name.toLowerCase()===n);
+  if(!c){ c = {id:uid(), name:String(name).trim()}; state.contractors.push(c); }
+  return c.id;
+}
+function findJEIdByName(name){
+  if(!name) return null;
+  const n = String(name).trim().toLowerCase();
+  let j = state.jes.find(j=>j.name.toLowerCase()===n);
+  if(!j){ j = {id:uid(), name:String(name).trim()}; state.jes.push(j); }
+  return j.id;
+}
+function findConstituencyIdByName(name){
+  if(!name) return null;
+  const n = String(name).trim().toLowerCase();
+  let c = state.constituencies.find(c=>c.name.toLowerCase()===n);
+  if(!c){ c = {id:uid(), name:String(name).trim()}; state.constituencies.push(c); }
+  return c.id;
+}
+function findVillageIdByName(name){
+  if(!name) return null;
+  const n = String(name).trim().toLowerCase();
+  let v = state.villages.find(v=>v.name.toLowerCase()===n);
+  if(!v){ v = {id:uid(), name:String(name).trim()}; state.villages.push(v); }
+  return v.id;
+}
+function parseExcelDate(v){
+  if(v==null || v==='') return '';
+  if(typeof v === 'number'){ // Excel serial date
+    const d = XLSX.SSF.parse_date_code(v);
+    if(d) return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+  }
+  const s = String(v).trim();
+  const d = new Date(s);
+  if(!isNaN(d.getTime())) return d.toISOString().slice(0,10);
+  return s;
+}
+function parsePaymentDatesField(s, fallbackTotalPaid){
+  const payments = [];
+  if(s && String(s).trim()){
+    String(s).split('|').forEach(chunk=>{
+      const parts = chunk.trim().split(':');
+      if(parts.length>=2){
+        const date = parseExcelDate(parts[0].trim());
+        const amount = Number(parts.slice(1).join(':').trim());
+        if(date && amount>0) payments.push({date, amount});
+      }
+    });
+  }
+  if(payments.length===0 && Number(fallbackTotalPaid)>0){
+    payments.push({date: todayISO(), amount: Number(fallbackTotalPaid)});
+  }
+  return payments;
+}
+function handleExcelImportFile(input){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('excelImportStatus');
+  statusEl.textContent = 'Reading file…';
+  if(typeof XLSX==='undefined'){ statusEl.textContent = 'Import library failed to load — check internet connection.'; return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const wb = XLSX.read(e.target.result, {type:'array', cellDates:false});
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+      let added = 0, skipped = 0;
+      rows.forEach(r=>{
+        const get = (...keys)=>{ for(const k of keys){ if(r[k]!==undefined && r[k]!=='') return r[k]; } return ''; };
+        const date = parseExcelDate(get('Date','date'));
+        const headName_ = get('Head','head','Maintenance Head');
+        const description = get('Description','description');
+        const contractorName_ = get('Contractor','contractor');
+        const amount = Number(get('Expenditure (INR)','Expenditure','Amount','amount'))||0;
+        if(!date || !headName_ || !amount){ skipped++; return; }
+        const je = get('JE Incharge','JE','je');
+        const constituency_ = get('Constituency','constituency');
+        const village_ = get('Village Panchayat','Village','village');
+        const lat = get('Latitude','latitude');
+        const lng = get('Longitude','longitude');
+        const totalPaid = get('Total Paid (INR)','Total Paid','Paid');
+        const payDatesField = get('Payment Dates','payments');
+        const workIdField = String(get('Work ID','WorkID','workId')||'').trim();
+        const entry = {
+          id: uid(),
+          workId: workIdField || undefined,
+          headId: findHeadIdByName(headName_),
+          date, description: String(description||''),
+          amount,
+          contractorId: contractorName_? findContractorIdByName(contractorName_) : null,
+          jeId: je? findJEIdByName(je) : null,
+          constituencyId: constituency_? findConstituencyIdByName(constituency_) : null,
+          villageId: village_? findVillageIdByName(village_) : null,
+          geo: (lat!=='' && lng!=='' && !isNaN(Number(lat)) && !isNaN(Number(lng)))? {lat:Number(lat), lng:Number(lng), accuracy:0, capturedAt:'imported'} : null,
+          payments: parsePaymentDatesField(payDatesField, totalPaid),
+          createdAt: new Date().toISOString()
+        };
+        ensureWorkId(entry);
+        state.entries.push(entry);
+        added++;
+      });
+      persist();
+      renderHeadsAndContractors();
+      render();
+      statusEl.textContent = `Imported ${added} record(s).` + (skipped? ` Skipped ${skipped} row(s) missing Date/Head/Amount.` : '');
+      showToast('Excel import complete');
+    }catch(err){
+      statusEl.textContent = 'Could not read this file: '+err.message;
+    }
+    input.value='';
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+/* ============================= IMPORT / EXPORT: JSON BACKUP ============================= */
+function exportJSONBackup(){
+  downloadFile(JSON.stringify(state, null, 2), 'ariankuppam_maintenance_backup_'+todayISO()+'.json', 'application/json');
+  showToast('Backup downloaded');
+}
+function handleJSONImportFile(input){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('jsonImportStatus');
+  const reader = new FileReader();
+  reader.onload = function(e){
+    let incoming;
+    try{ incoming = JSON.parse(e.target.result); }
+    catch(err){ statusEl.textContent = 'This file is not a valid backup (invalid JSON).'; input.value=''; return; }
+    if(!incoming || !Array.isArray(incoming.entries) || !Array.isArray(incoming.heads)){
+      statusEl.textContent = 'This file does not look like a valid backup.'; input.value=''; return;
+    }
+    const replace = confirm(
+      `This backup contains ${incoming.entries.length} record(s).\n\nPress OK to MERGE it into your current data (recommended).\nPress Cancel to REPLACE all current data with this backup instead.`
+    );
+    if(replace){
+      // Merge: dedupe heads/contractors/JEs/constituencies/villages by name, remap entry ids, skip exact-duplicate entries
+      const headIdMap = {};
+      incoming.heads.forEach(h=>{ headIdMap[h.id] = findHeadIdByName(h.name); });
+      const contractorIdMap = {};
+      (incoming.contractors||[]).forEach(c=>{ contractorIdMap[c.id] = findContractorIdByName(c.name); });
+      const jeIdMap = {};
+      (incoming.jes||[]).forEach(j=>{ jeIdMap[j.id] = findJEIdByName(j.name); });
+      const constituencyIdMap = {};
+      (incoming.constituencies||[]).forEach(c=>{ constituencyIdMap[c.id] = findConstituencyIdByName(c.name); });
+      const villageIdMap = {};
+      (incoming.villages||[]).forEach(v=>{ villageIdMap[v.id] = findVillageIdByName(v.name); });
+      let added=0, dup=0;
+      incoming.entries.forEach(e=>{
+        const newHeadId = headIdMap[e.headId] || findHeadIdByName(e.headId);
+        const newContractorId = e.contractorId ? (contractorIdMap[e.contractorId] || findContractorIdByName(e.contractorId)) : null;
+        const newJeId = e.jeId ? (jeIdMap[e.jeId] || findJEIdByName(e.jeId)) : null;
+        const newConstituencyId = e.constituencyId ? (constituencyIdMap[e.constituencyId] || findConstituencyIdByName(e.constituencyId)) : null;
+        const newVillageId = e.villageId ? (villageIdMap[e.villageId] || findVillageIdByName(e.villageId)) : null;
+        const isDup = state.entries.some(x=> x.date===e.date && x.headId===newHeadId && Number(x.amount)===Number(e.amount) && (x.description||'')===(e.description||''));
+        if(isDup){ dup++; return; }
+        const newEntry = {...e, id:uid(), headId:newHeadId, contractorId:newContractorId, jeId:newJeId, constituencyId:newConstituencyId, villageId:newVillageId, workId:undefined};
+        ensureWorkId(newEntry);
+        state.entries.push(newEntry);
+        added++;
+      });
+      persist(); renderHeadsAndContractors(); render();
+      statusEl.textContent = `Merged: ${added} record(s) added, ${dup} likely duplicate(s) skipped.`;
+      showToast('Backup merged');
+    }else{
+      state = incoming;
+      if(!state.contractors) state.contractors=[];
+      if(!state.jes) state.jes=[];
+      if(!state.constituencies) state.constituencies=[{id:uid(),name:'Ariankuppam Part'},{id:uid(),name:'Manavely'}];
+      if(!state.villages) state.villages=[];
+      if(!state.nextSeq) state.nextSeq = (state.entries.length||0)+1;
+      state.entries.forEach(ensureWorkId);
+      persist(); renderHeadsAndContractors(); render();
+      statusEl.textContent = `Replaced all data with backup (${state.entries.length} record(s)).`;
+      showToast('Backup restored');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+/* ============================= TABS ============================= */
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id===tabId));
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tabId));
+  window.scrollTo({top:0, behavior:'smooth'});
+  localStorage.setItem('akp_active_tab', tabId);
+}
+
+/* ============================= INIT ============================= */
+function init(){
+  let migrated = false;
+  state.entries.forEach(e=>{ if(!e.workId){ ensureWorkId(e); migrated = true; } });
+  if(migrated) persist();
+  renderHeadsAndContractors();
+  renderSecurityPanel();
+  document.getElementById('fFrom').value='';
+  document.getElementById('fTo').value='';
+  ['fHead','fContractor','fJE','fConstituency','fVillage','fFrom','fTo','fPay','fGeo','fSearch'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', render);
+    document.getElementById(id).addEventListener('change', render);
+  });
+  const startTab = localStorage.getItem('akp_active_tab') || 'tabDashboard';
+  switchTab(document.getElementById(startTab)? startTab : 'tabDashboard');
+  render();
+}
+init();
+const pwdConfirmInputEl = document.getElementById('pwdConfirmInput');
+if(pwdConfirmInputEl) pwdConfirmInputEl.addEventListener('keydown', ev=>{
+  if(ev.key==='Enter') submitPasswordConfirm();
+});
+</script>
+</body>
+</html>
